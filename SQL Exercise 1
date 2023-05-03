@@ -1,4 +1,4 @@
-#Criação de Tabelas
+#1 Criação de Tabelas
 
 create table Aluno (
 	ID_ALU int NOT NULL IDENTITY(1,1) PRIMARY KEY, 
@@ -39,7 +39,7 @@ create table Prova(
 );
 
 
-#Criação de Index
+# 2 Criação de Index
 
 
 create index idx_Aluno on Aluno(Nome,DtNascimento,Sala);
@@ -53,7 +53,7 @@ create index idx_Professor on Professor(Nome,DtNascimento);
 create index idx_Prova on Prova(ID_ALU, Data, Nota);
 
 
-#Insert INTO
+#Inserir Informações
 
 INSERT INTO Aluno(Nome, DtNascimento, Endereço, Sala) VALUES ('Rubersvaldo Silva', '1985-03-10', 'Av. Lapa, 1000', 9); 
 
@@ -87,6 +87,6 @@ INSERT INTO Sala(Descrição, ID_BLO, Serie) VALUES ('Sala 01 - Informatica', 1,
 
 INSERT INTO Sala(Descrição, ID_BLO, Serie) VALUES ('Sala 02 - Física Quantica', 1,3);
 
-insert into ProfSala VALUES(6,2);
+INSERT INTO ProfSala VALUES(6,2);
 
-insert into ProfSala VALUES(5,1);
+INSERT INTO ProfSala VALUES(5,1);
