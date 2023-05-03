@@ -1,0 +1,92 @@
+#Criação de Tabelas
+
+create table Aluno (
+	ID_ALU int NOT NULL IDENTITY(1,1) PRIMARY KEY, 
+	Nome varchar(50), 
+	DtNascimento date, 
+	Endereço varchar(50), 
+	Sala int
+);
+
+create table Sala(
+	ID_SAL int IDENTITY(1,1) PRIMARY KEY,
+	Descrição varchar(50),
+	ID_BLO int,
+	Serie int
+);
+
+create table Bloco(
+	ID_BLO int IDENTITY(1,1) PRIMARY KEY,
+	Descricao varchar(15)
+);
+
+create table Professor(
+	ID_PROF int IDENTITY(1,1) PRIMARY KEY,
+	Nome varchar(50),
+	DtNascimento date
+);
+
+create table ProfSala(
+	ID_PROF int FOREIGN KEY REFERENCES Professor(ID_PROF),
+	ID_SAL int FOREIGN KEY REFERENCES Sala(ID_SAL)
+);
+
+create table Prova(
+	ID_PRO int IDENTITY(1,1) PRIMARY KEY,
+	ID_ALU int,
+	Data int,
+	Nota decimal
+);
+
+
+#Criação de Index
+
+
+create index idx_Aluno on Aluno(Nome,DtNascimento,Sala);
+
+create index idx_Sala on Sala(Descrição, ID_BLO);
+
+create index idx_Bloco on Bloco(Descricao);
+
+create index idx_Professor on Professor(Nome,DtNascimento);
+
+create index idx_Prova on Prova(ID_ALU, Data, Nota);
+
+
+#Insert INTO
+
+INSERT INTO Aluno(Nome, DtNascimento, Endereço, Sala) VALUES ('Rubersvaldo Silva', '1985-03-10', 'Av. Lapa, 1000', 9); 
+
+INSERT INTO Aluno(Nome, DtNascimento, Endereço, Sala) VALUES ('Godofredo dos Santos Veiga', '1989-01-03', 'Alameda dos sucumplinios, 332', 8); 
+
+INSERT INTO Aluno(Nome, DtNascimento, Endereço, Sala) VALUES ('Filomena Rubicunda Rosa', '1992-06-22', 'Travessa dos Zikas, 157', 8);
+
+INSERT INTO Aluno(Nome, DtNascimento, Endereço, Sala) VALUES ('Cleiton', '1988-05-26', 'Rua Treze, 13', 7); 
+
+INSERT INTO Bloco(Descricao) VALUES ('Bloco A'); 
+
+INSERT INTO Bloco(Descricao) VALUES ('Bloco B'); 
+
+INSERT INTO Bloco(Descricao) VALUES ('Bloco C'); 
+
+INSERT INTO Bloco(Descricao) VALUES ('Bloco D'); 
+
+INSERT INTO Bloco(Descricao) VALUES ('Bloco E'); 
+
+INSERT INTO Professor(Nome,DtNascimento) VALUES ('Aloprado dos Santos','1966-05-05');
+
+INSERT INTO Professor(Nome,DtNascimento) VALUES ('Charles Xavier','1948-09-18');
+
+INSERT INTO Professor(Nome,DtNascimento) VALUES ('Tiburcio Tibério','1962-07-11');
+
+INSERT INTO Professor(Nome,DtNascimento) VALUES ('Utonio Oinotu','1966-05-05');
+
+INSERT INTO Prova (ID_ALU,Data) VALUES (2,2023-04-25);
+
+INSERT INTO Sala(Descrição, ID_BLO, Serie) VALUES ('Sala 01 - Informatica', 1,1);
+
+INSERT INTO Sala(Descrição, ID_BLO, Serie) VALUES ('Sala 02 - Física Quantica', 1,3);
+
+insert into ProfSala VALUES(6,2);
+
+insert into ProfSala VALUES(5,1);
