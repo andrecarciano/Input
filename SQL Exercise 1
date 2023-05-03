@@ -1,7 +1,7 @@
 #1 Criação de Tabelas
 
 create table Aluno (
-	ID_ALU int NOT NULL IDENTITY(1,1) PRIMARY KEY, 
+	ID_ALU int IDENTITY(1,1), 
 	Nome varchar(50), 
 	DtNascimento date, 
 	Endereço varchar(50), 
@@ -9,26 +9,26 @@ create table Aluno (
 );
 
 create table Sala(
-	ID_SAL int IDENTITY(1,1) PRIMARY KEY,
+	ID_SAL int IDENTITY(1,1),
 	Descrição varchar(50),
 	ID_BLO int,
 	Serie int
 );
 
 create table Bloco(
-	ID_BLO int IDENTITY(1,1) PRIMARY KEY,
+	ID_BLO int IDENTITY(1,1),
 	Descricao varchar(15)
 );
 
 create table Professor(
-	ID_PROF int IDENTITY(1,1) PRIMARY KEY,
+	ID_PROF int IDENTITY(1,1),
 	Nome varchar(50),
 	DtNascimento date
 );
 
 create table ProfSala(
-	ID_PROF int FOREIGN KEY REFERENCES Professor(ID_PROF),
-	ID_SAL int FOREIGN KEY REFERENCES Sala(ID_SAL)
+	ID_PROF int NOT NULL ,
+	ID_SAL int NOT NULL 
 );
 
 create table Prova(
@@ -39,21 +39,25 @@ create table Prova(
 );
 
 
-# 2 Criação de Index
+# 2 Criação de Chave Primaria e Index
 
-
+ALTER TABLE Aluno ADD PRIMARY KEY(ID_ALU);
 create index idx_Aluno on Aluno(Nome,DtNascimento,Sala);
 
+ALTER TABLE Sala ADD PRIMARY KEY(ID_SAL);
 create index idx_Sala on Sala(Descrição, ID_BLO);
 
+ALTER TABLE Bloco ADD PRIMARY KEY(ID_BLO);
 create index idx_Bloco on Bloco(Descricao);
 
+ALTER TABLE Professor ADD PRIMARY KEY(ID_PROF);
 create index idx_Professor on Professor(Nome,DtNascimento);
 
-create index idx_Prova on Prova(ID_ALU, Data, Nota);
+ALTER TABLE ProfSala ADD PRIMARY KEY (ID_PROF, ID_SAL);
 
 
-#Inserir Informações
+
+# 3 Inserir Informações
 
 INSERT INTO Aluno(Nome, DtNascimento, Endereço, Sala) VALUES ('Rubersvaldo Silva', '1985-03-10', 'Av. Lapa, 1000', 9); 
 
@@ -90,3 +94,78 @@ INSERT INTO Sala(Descrição, ID_BLO, Serie) VALUES ('Sala 02 - Física Quantica
 INSERT INTO ProfSala VALUES(6,2);
 
 INSERT INTO ProfSala VALUES(5,1);
+
+
+
+# 3.1 CRIAÇÃO DE SCHEMA BKP
+
+CREATE SCHEMA BKP; 
+
+
+
+# 3.2 BACKUP DAS TABELAS NO SCHEMA BKP
+
+SELECT * INTO BKP.Aluno FROM Aluno;
+SELECT * INTO BKP.Bloco FROM Bloco;
+SELECT * INTO BKP.Professor FROM Professor;
+SELECT * INTO BKP.Prova FROM Prova;
+SELECT * INTO BKP.Sala FROM Sala;
+SELECT * INTO BKP.ProfSala FROM ProfSala;
+
+
+# 3.3 Alteração de Registros Originais
+
+UPDATE Aluno SET Nome = 'Francisco Chico' Where ID_ALU = 1;
+UPDATE Aluno SET Nome = 'Cleitinho' Where ID_ALU = 4;
+
+
+# 3.4 Exclusao de Registros das Tabelas Originais
+
+DELETE FROM Aluno WHERE ID_ALU = 1;
+DELETE FROM Bloco WHERE ID_BLO = 4;
+DELETE FROM Bloco WHERE ID_BLO = 5;
+
+
+# 4 Exclusao de Todos os registros das tabelas originais
+
+DELETE FROM Aluno;
+DELETE FROM Bloco;
+DELETE FROM Professor;
+DELETE FROM ProfSala;
+DELETE FROM Prova;
+DELETE FROM Sala;
+
+
+# 4.1 Retornar os registros Atraves do BKP
+
+SET IDENTITY_INSERT Aluno ON;
+INSERT INTO Aluno(ID_ALU, Nome, DtNascimento, Endereço, Sala) 
+SELECT ID_ALU, Nome, DtNascimento, Endereço, Sala FROM BKP.Aluno;
+SET IDENTITY_INSERT Aluno OFF;
+
+SET IDENTITY_INSERT Bloco ON;
+INSERT INTO Bloco(ID_BLO, Descricao)
+SELECT ID_BLO, Descricao FROM BKP.Bloco;
+SET IDENTITY_INSERT Bloco OFF;
+
+SET IDENTITY_INSERT Professor ON;
+INSERT INTO Professor(DtNascimento, ID_PROF, Nome)
+SELECT DtNascimento, ID_PROF, Nome FROM BKP.Professor;
+SET IDENTITY_INSERT Professor OFF;
+
+SET IDENTITY_INSERT Prova ON;
+INSERT INTO Prova(Data, ID_ALU, ID_PRO, Nota)
+SELECT Data, ID_ALU, ID_PRO, Nota FROM BKP.Prova;
+SET IDENTITY_INSERT Prova OFF;
+
+SET IDENTITY_INSERT Sala ON;
+INSERT INTO Sala(Descrição, ID_BLO, ID_SAL, Serie)
+SELECT Descrição, ID_BLO, ID_SAL, Serie FROM BKP.Sala;
+SET IDENTITY_INSERT Sala OFF;
+
+INSERT INTO ProfSala(ID_PROF, ID_SAL)
+SELECT ID_PROF, ID_SAL FROM BKP.ProfSala;
+
+
+
+
