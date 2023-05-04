@@ -213,3 +213,15 @@ RETURNS TABLE
 AS
 RETURN SELECT a.* FROM Aluno a 	join Prova p on a.ID_ALU = p.ID_ALU 
 where Sala = @SALA and p.Nota<5
+
+
+--8 Criação de View
+
+CREATE VIEW AlunoVW7 AS 
+SELECT count(*) qtd,a.* FROM Aluno a join Prova p on a.ID_ALU = p.ID_ALU 
+where DATEDIFF ( DAY ,a.DtNascimento, GETDATE()  )/365.25  > 7 and Nota > 8
+group by Nome,a.ID_ALU, a.DtNascimento, a.Endereço, a.Sala 
+having COUNT(a.Nome) >= 5
+
+--9 Criação de Triggers
+
