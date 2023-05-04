@@ -34,7 +34,7 @@ create table ProfSala(
 create table Prova(
 	ID_PRO int IDENTITY(1,1) PRIMARY KEY,
 	ID_ALU int,
-	Data int,
+	Data date,
 	Nota decimal
 );
 
@@ -52,6 +52,9 @@ create index idx_Bloco on Bloco(Descricao);
 
 ALTER TABLE Professor ADD PRIMARY KEY(ID_PROF);
 create index idx_Professor on Professor(Nome,DtNascimento);
+
+ALTER TABLE Prova ADD PRIMARY KEY(ID_PRO);
+create index idx_Prova on Prova(ID_ALU,Data, Nota);
 
 ALTER TABLE ProfSala ADD PRIMARY KEY (ID_PROF, ID_SAL);
 
@@ -95,6 +98,15 @@ INSERT INTO ProfSala VALUES(6,2);
 
 INSERT INTO ProfSala VALUES(5,1);
 
+INSERT INTO Prova(ID_ALU,Data,Nota) VALUES (1, 2023-04-15, 5)
+
+INSERT INTO Prova(ID_ALU,Data,Nota) VALUES (2, 2023-04-15, 10)
+
+INSERT INTO Prova(ID_ALU,Data,Nota) VALUES (3, 2023-04-15, 8)
+
+INSERT INTO Prova(ID_ALU,Data,Nota) VALUES (4, 2023-04-15, 7)
+
+INSERT INTO Prova(ID_ALU,Data,Nota) VALUES (5, 2023-04-15, 6)
 
 
 -- 3.1 CRIAÇÃO DE SCHEMA BKP
@@ -166,6 +178,38 @@ SET IDENTITY_INSERT Sala OFF;
 INSERT INTO ProfSala(ID_PROF, ID_SAL)
 SELECT ID_PROF, ID_SAL FROM BKP.ProfSala;
 
--- 5 Criação de procedures
+-- 5 Criação de procedure
+
+CREATE PROCEDURE ALU_Bloco(@Bloco INT)
+AS BEGIN
+SELECT ALU.* FROM Sala SAL 
+JOIN Bloco BLO ON SAL.ID_BLO = BLO.ID_BLO 
+JOIN Aluno ALU ON SAL.ID_SAL = ALU.Sala
+WHERE SAL.BLO = @Bloco
+END
+
+-- 5.1
+CREATE PROCEDURE NOTA_INF
+AS BEGIN
+UPDATE Aluno SET Nome = Nome + ' Nota Baixa' 
+from Prova 
+where Aluno.ID_ALU = Prova.ID_ALU 
+and Prova.Nota < 7
+END
 
 
+-- 6 Criação de função escalar
+
+CREATE FUNCTION QTD_PROF_SALA(@SALA INT)
+RETURNS INT
+AS BEGIN
+RETURN (SELECT COUNT(*) FROM ProfSala WHERE ID_SAL=@SALA)
+END
+
+-- 7 Criação de Função Tabular
+
+CREATE function AluNotta (@SALA int)
+RETURNS TABLE 
+AS
+RETURN SELECT a.* FROM Aluno a 	join Prova p on a.ID_ALU = p.ID_ALU 
+where Sala = @SALA and p.Nota<5
