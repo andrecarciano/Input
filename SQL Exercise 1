@@ -1,3 +1,5 @@
+SELECT * FROM Professor p inner join ProfSala ps on p.ID_PROF = ps.ID_PROF inner join Sala s on ps.ID_SAL=s.ID_SAL;
+
 -- 1 Criação de Tabelas
 
 create table Aluno (
