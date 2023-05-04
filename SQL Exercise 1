@@ -88,7 +88,7 @@ INSERT INTO Professor(Nome,DtNascimento) VALUES ('Tiburcio Tibério','1962-07-11
 
 INSERT INTO Professor(Nome,DtNascimento) VALUES ('Utonio Oinotu','1966-05-05');
 
-INSERT INTO Prova (ID_ALU,Data) VALUES (2,2023-04-25);
+INSERT INTO Prova (ID_ALU,Data) VALUES (2,'2023-04-25');
 
 INSERT INTO Sala(Descrição, ID_BLO, Serie) VALUES ('Sala 01 - Informatica', 1,1);
 
