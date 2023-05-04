@@ -1,4 +1,4 @@
-#1 Criação de Tabelas
+-- 1 Criação de Tabelas
 
 create table Aluno (
 	ID_ALU int IDENTITY(1,1), 
@@ -39,7 +39,7 @@ create table Prova(
 );
 
 
-# 2 Criação de Chave Primaria e Index
+-- 2 Criação de Chave Primaria e Index
 
 ALTER TABLE Aluno ADD PRIMARY KEY(ID_ALU);
 create index idx_Aluno on Aluno(Nome,DtNascimento,Sala);
@@ -57,7 +57,7 @@ ALTER TABLE ProfSala ADD PRIMARY KEY (ID_PROF, ID_SAL);
 
 
 
-# 3 Inserir Informações
+-- 3 Inserir Informações
 
 INSERT INTO Aluno(Nome, DtNascimento, Endereço, Sala) VALUES ('Rubersvaldo Silva', '1985-03-10', 'Av. Lapa, 1000', 9); 
 
@@ -97,13 +97,13 @@ INSERT INTO ProfSala VALUES(5,1);
 
 
 
-# 3.1 CRIAÇÃO DE SCHEMA BKP
+-- 3.1 CRIAÇÃO DE SCHEMA BKP
 
 CREATE SCHEMA BKP; 
 
 
 
-# 3.2 BACKUP DAS TABELAS NO SCHEMA BKP
+-- 3.2 BACKUP DAS TABELAS NO SCHEMA BKP
 
 SELECT * INTO BKP.Aluno FROM Aluno;
 SELECT * INTO BKP.Bloco FROM Bloco;
@@ -113,20 +113,20 @@ SELECT * INTO BKP.Sala FROM Sala;
 SELECT * INTO BKP.ProfSala FROM ProfSala;
 
 
-# 3.3 Alteração de Registros Originais
+-- 3.3 Alteração de Registros Originais
 
 UPDATE Aluno SET Nome = 'Francisco Chico' Where ID_ALU = 1;
 UPDATE Aluno SET Nome = 'Cleitinho' Where ID_ALU = 4;
 
 
-# 3.4 Exclusao de Registros das Tabelas Originais
+-- 3.4 Exclusao de Registros das Tabelas Originais
 
 DELETE FROM Aluno WHERE ID_ALU = 1;
 DELETE FROM Bloco WHERE ID_BLO = 4;
 DELETE FROM Bloco WHERE ID_BLO = 5;
 
 
-# 4 Exclusao de Todos os registros das tabelas originais
+-- 4 Exclusao de Todos os registros das tabelas originais
 
 DELETE FROM Aluno;
 DELETE FROM Bloco;
@@ -136,7 +136,7 @@ DELETE FROM Prova;
 DELETE FROM Sala;
 
 
-# 4.1 Retornar os registros Atraves do BKP
+-- 4.1 Retornar os registros Atraves do BKP
 
 SET IDENTITY_INSERT Aluno ON;
 INSERT INTO Aluno(ID_ALU, Nome, DtNascimento, Endereço, Sala) 
@@ -166,6 +166,6 @@ SET IDENTITY_INSERT Sala OFF;
 INSERT INTO ProfSala(ID_PROF, ID_SAL)
 SELECT ID_PROF, ID_SAL FROM BKP.ProfSala;
 
-
+-- 5 Criação de procedures
 
 
