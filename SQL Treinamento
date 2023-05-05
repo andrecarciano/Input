@@ -1,0 +1,97 @@
+CRIANDO TABELAS
+O primeiro exercício se baseia em criar as tabelas para futuramente usarmos para nossa primeira aplicação CLARION.
+Para criar uma tabela usamos o comando CREATE TABLE Aluno, algumas regras para criação de tabelas são: Não pode conter caracteres especiais, não usar o plural, e com nome mais descritivo possível.
+Abaixo segue um exemplo de como deve ser feito a criação da tabela juntamente com suas colunas e seus tipos. 
+FIGURA 1 - CRIANDO UMA TABELA:
+ 
+O ID de toda tabela deve vir acompanhada do prefixo da tabela, não podendo passar de 3 caracteres e sempre sendo o mais descritível possível referenciando a tabela.
+Ao criar a tabela já deixamos predefino o ID_ALU, que será nossa chave primária, com o comando IDENTITY. (o IDENTITY faz com que a coluna seja auto preenchida, sendo passado dois parâmetros, o primeiro é para indicar o valor inicial, o segundo é para indicar de quanto em quanto irá pular).
+
+CRIAÇÃO DE CHAVE PRIMÁRIA E ÍNDICE
+
+Para o segundo exercício usaremos o exemplo a seguir:
+FIGURA 2 - ADICIONANDO UMA CHAVE PRIMÁRIA:
+ 
+Desta forma foi adiciona por parâmetro a coluna a ser transformada em chave primária.
+
+ÍNDICE (INDEX)
+
+Abaixo temos como deve ser feita a criação das index, repare que a index também carrega o prefixo da tabela, pois é de extrema importância para manter a organização para futuras pesquisas no banco, repare também que a index é chamada de “K02_ALU” isso acontece porque a PK ID_ALU já é nossa Key primária (01), portanto a próxima Key carrega a nomenclatura 02, assim por diante para os próximos índices conforme descrito no arquivo de treinamento.
+FIGURA 3 - CRIANDO UM ÍNDICE:
+ 
+
+POPULANDO AS TABELAS E CRIANDO SCHEMA
+
+Primeiramente, os Schemas são coleções de objetos dentro de um determinado banco de dados, que organizam vários aspectos e são importantes para segmentação da segurança, facilitando a administração dos objetos e dos dados. O Schema que usaremos será para criar um Backup como pedido no exercício. Vamos começar populando nossas tabelas usando a syntax:
+FIGURA 4 - INSERINDO VALORES:
+ 
+
+O Comando para criar o Schema é bem simples:
+FIGURA 5 - CRIANDO UM SCHEMA:
+ 
+Podemos ver que o Schema também carrega um prefixo para facilitar consultas dentro do backup. Agora precisamos atribuir os valores das tabelas originais dentro do nosso backup usando o código:
+FIGURA 6 - PASSANDO VALORES DA TABELA PARA O SCHEMA:
+ 
+	
+Agora vamos fazer algumas alterações em todas as tabelas originais, abaixo temos o código:
+FIGURA 7 - ALTERANDO REGISTRO ESPECIFICO:
+ 
+
+Podemos ver que estamos atualizando a tabela ‘Aluno’, usando o SET estamos substituindo o nome antigo pelo nome ‘Tobias’, o comando WHERE é a condição para saber qual registro estamos modificando, ou seja, aonde o ID do aluno é 1.
+Para excluir algum registro da tabela usamos:
+FIGURA 8 - DELETANDO REGISTRO ESPECIFICO:
+ 
+Preste bastante atenção quando for usar o comando DELETE, lembre-se sempre de usar uma condição caso contrario todos os dados daquela tabela serão perdidos. Na linha acima apagamos o registro aonde o ID do aluno é 1 da tabela Aluno.
+EXCLUSÃO TOTAL E USO DO BACKUP
+
+Neste exercício iremos apagar todos os registros de todas as tabelas originais, para isso é só usar o comando acima, sem a condição WHERE.
+
+Porém iremos nos deparar com um problema, como a coluna de ID está com o identity, ele irá criar um novo registro agora com ID sendo 2, ou seja, mesmo que os registros tenham sido apagados o identity ainda esta ativo e irá entender que o registro inserido é um novo registro. Para resolver isso usaremos o comando IDENTITY_INSERT para devolvermos os registros da tabela de Backup para a tabela original dessa forma:
+FIGURA 9 - DEVOLVENDO REGISTROS DO BKP:
+ 
+CRIAÇÃO DE PROCEDURES
+
+Uma procedure é um bloco de comandos ou instruções SQL organizados para executar uma ou mais tarefas. Ela pode ser utilizada para ser acionada através de uma chamada simples que executa uma série de outros comandos. Para fazermos a procedure usaremos este código passando o parâmetro do bloco:
+FIGURA 10 - CRIANDO UMA PROCEDURE:
+ 
+Entre o BEGIN e o END é onde será colocado o código do que a procedure deve fazer. Procedures podem ter mais de 1 parâmetro. Posteriormente chamaremos a procedure com o comando EXEC NomeProcedure (número do bloco).
+FUNÇÃO ESCALAR
+
+Chamamos de função escalar aquelas que sempre retornam um único valor como resultado, ela aceita parâmetros, executa uma ação, como um cálculo complexo, e retorna o resultado dessa ação como um valor. O valor de retorno pode ser um valor escalar (único) ou uma tabela. Abaixo está um exemplo de uma função escalar e sua syntax:
+FIGURA 11 - CRIANDO UMA FUNÇÃO ESCALAR:
+ 
+
+
+FUNÇÃO TABULAR
+
+Abaixo temos uma função tabular, como o próprio nome sugere, ela retorna uma tabela através de 1 ou mais parâmetros passados, neste exemplo esta função está retornando uma tabela de todos os professores que dão aula na sala que será passada por parâmetro.
+
+FIGURA 12 - CRIANDO UMA FUNÇÃO TABULAR:
+ 
+CRIAÇÃO DE VIEWS
+
+Uma view pode ser considerada como uma tabela virtual, composta por linhas e colunas de dados vindo das tabelas através de uma busca, quando criamos uma view podemos filtrar os dados de qualquer tabela, uma view também pode ser chamada por outras views. Aqui está um exemplo de uma view:
+FIGURA 13 - CRIANDO UMA VIEW:
+ 
+Na view ‘VWfilme’ contém apenas alguns dados da tabela de filmes e não todos eles, dessa forma podemos usar essa view com os dados resumidos em outras buscas mais avançadas, obviamente este é um exemplo de uma view simples, na view também é possível fazer buscas muito mais avançadas.
+TRIGGERS
+
+Triggers são gatilhos que são disparados através de alguma ação passada por parâmetro que realizará outra ação
+Uma trigger precisa de ter como parâmetro: [FOR, AFETER, INSTEAD OF]. Uma dessas opções deve ser escolhida para sabermos quando a triggers (gatilho) deve ser disparado. O FOR faz com que a trigger seja ativada juntamente com ação, AFTER faz com que a trigger seja ativada somente após a ação ser concluída, e por fim INSTEAD OF faz com que a trigger seja ativada no lugar da ação que o gerou.
+Outros parâmetros necessários para o funcionamento da trigger são: [INSERT, UPDATE, DELETE]. O INSERT faz com que a ação para ativar o gatilho seja a de inserir algo, o UPDATE faz com que o gatilho seja ativado através da ação de atualizar algo, e por fim temos o DELETE que faz com que o gatilho seja ativado através da ação de deletar algo.
+
+A syntax para uma trigger é: 
+FIGURA 14 - CRIANDO UMA TRIGGER:
+ 
+A trigger de exemplo está executando a seguinte ação: após deletar algo da tabela lixo, ele adiciona ‘NewLixo’ na coluna lixos da tabela lixeira.
+JOBS
+
+Jobs são designados para fazerem uma tarefa contínua executada sequencialmente pelo SQL Server Agent, como por exemplo apagar os dados de uma tabela todo domingo, adicionar idade pela data de nascimento de usuários cadastros sempre que passar 1 ano entre outros. (veja mais em: https://www.devmedia.com.br/sql-server-agent/24607).
+Segue o link com o passo a passo para a criação de um Job:
+https://centraldeatendimento.totvs.com/hc/pt-br/articles/360038776674-WINT-Como-criar-um-job-no-sqlserver-para-executar-as-atualiza%C3%A7%C3%B5es-de-forma-autom%C3%A1tica
+
+Alguns sites para seu conhecimento:
+
+https://www.w3schools.com/sql/default.asp
+https://pt.stackoverflow.com/questions/tagged/sql-server
+https://www.devmedia.com.br/sql/
