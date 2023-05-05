@@ -13,7 +13,7 @@ sUserName = wshShell.ExpandEnvironmentStrings("%USERNAME%")
 Set oShell = CreateObject("WScript.Shell")
 Set oFSO = CreateObject("Scripting.FileSystemObject")
 sWinDir = oFSO.GetSpecialFolder(0)
-sWallPaper = "\\IC-FILES01\trainee$\APLICA\Desenv\Hospital7\JefersonOS\pablo\tela\" & bp & ".jpg" 'colocar bp para aleatorio
+sWallPaper = "C:\Users\andre.matos\Pictures\Background" & bp & ".jpg" 'colocar bp para aleatorio
 oShell.RegWrite "HKCU\Control Panel\Desktop\Wallpaper", sWallPaper
 oShell.Run "%windir%\System32\RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters", 0, True
 bl = bl + 1
