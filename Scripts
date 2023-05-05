@@ -1,0 +1,22 @@
+
+--Copiar dados para Schema BKP
+SELECT * INTO BKP.Aluno FROM Aluno;
+
+--Recuperar dados do Schema BKP
+SET IDENTITY_INSERT Aluno ON;
+INSERT INTO Aluno(ID_ALU, Nome, DtNascimento, Endereço, Sala) 
+SELECT ID_ALU, Nome, DtNascimento, Endereço, Sala FROM BKP.Aluno;
+SET IDENTITY_INSERT Aluno OFF;
+
+--Select com Replace
+SELECT REPLACE (Nome, 'Nota Baixa', '') from Aluno
+
+--Update com Replace
+UPDATE Aluno SET Nome=REPLACE (Nome, 'Nota Baixa', '') from Aluno
+
+--criação de view com group by e having
+CREATE VIEW AlunoVW7 AS 
+SELECT count(*) qtd,a.* FROM Aluno a join Prova p on a.ID_ALU = p.ID_ALU 
+where DATEDIFF ( DAY ,a.DtNascimento, GETDATE()  )/365.25  > 7 and Nota > 8
+group by Nome,a.ID_ALU, a.DtNascimento, a.Endereço, a.Sala 
+having COUNT(a.Nome) >= 5
