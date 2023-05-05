@@ -40,7 +40,7 @@ create table Prova(
 	Nota decimal
 );
 
-
+GO
 -- 2 Criação de Chave Primaria e Index
 
 ALTER TABLE Aluno ADD PRIMARY KEY(ID_ALU);
@@ -60,7 +60,7 @@ create index idx_Prova on Prova(ID_ALU,Data, Nota);
 
 ALTER TABLE ProfSala ADD PRIMARY KEY (ID_PROF, ID_SAL);
 
-
+GO
 
 -- 3 Inserir Informações
 
@@ -110,11 +110,11 @@ INSERT INTO Prova(ID_ALU,Data,Nota) VALUES (4, '2023-04-15', 7)
 
 INSERT INTO Prova(ID_ALU,Data,Nota) VALUES (5, '2023-04-15', 6)
 
-
+GO
 -- 3.1 CRIAÇÃO DE SCHEMA BKP
 
 CREATE SCHEMA BKP; 
-
+GO
 
 
 -- 3.2 BACKUP DAS TABELAS NO SCHEMA BKP
@@ -126,12 +126,14 @@ SELECT * INTO BKP.Prova FROM Prova;
 SELECT * INTO BKP.Sala FROM Sala;
 SELECT * INTO BKP.ProfSala FROM ProfSala;
 
+GO
 
 -- 3.3 Alteração de Registros Originais
 
 UPDATE Aluno SET Nome = 'Francisco Chico' Where ID_ALU = 1;
 UPDATE Aluno SET Nome = 'Cleitinho' Where ID_ALU = 4;
 
+GO
 
 -- 3.4 Exclusao de Registros das Tabelas Originais
 
@@ -139,7 +141,7 @@ DELETE FROM Aluno WHERE ID_ALU = 1;
 DELETE FROM Bloco WHERE ID_BLO = 4;
 DELETE FROM Bloco WHERE ID_BLO = 5;
 
-
+GO
 -- 4 Exclusao de Todos os registros das tabelas originais
 
 DELETE FROM Aluno;
@@ -149,6 +151,7 @@ DELETE FROM ProfSala;
 DELETE FROM Prova;
 DELETE FROM Sala;
 
+GO
 
 -- 4.1 Retornar os registros Atraves do BKP
 
@@ -180,6 +183,8 @@ SET IDENTITY_INSERT Sala OFF;
 INSERT INTO ProfSala(ID_PROF, ID_SAL)
 SELECT ID_PROF, ID_SAL FROM BKP.ProfSala;
 
+GO
+
 -- 5 Criação de procedure
 
 CREATE PROCEDURE ALU_Bloco(@Bloco INT)
@@ -190,6 +195,8 @@ JOIN Aluno ALU ON SAL.ID_SAL = ALU.Sala
 WHERE SAL.ID_BLO = @Bloco
 END
 
+GO
+
 -- 5.1
 CREATE PROCEDURE NOTA_INF
 AS BEGIN
@@ -199,6 +206,7 @@ where Aluno.ID_ALU = Prova.ID_ALU
 and Prova.Nota < 7
 END
 
+GO
 
 -- 6 Criação de função escalar
 
@@ -208,6 +216,8 @@ AS BEGIN
 RETURN (SELECT COUNT(*) FROM ProfSala WHERE ID_SAL=@SALA)
 END
 
+GO
+
 -- 7 Criação de Função Tabular
 
 CREATE function AluNotta (@SALA int)
@@ -216,14 +226,44 @@ AS
 RETURN SELECT a.* FROM Aluno a 	join Prova p on a.ID_ALU = p.ID_ALU 
 where Sala = @SALA and p.Nota<5
 
+GO
 
 --8 Criação de View
 
-CREATE VIEW AlunoVW7 AS 
+CREATE VIEW VWAluno7 AS 
 SELECT count(*) qtd,a.* FROM Aluno a join Prova p on a.ID_ALU = p.ID_ALU 
 where DATEDIFF ( DAY ,a.DtNascimento, GETDATE()  )/365.25  > 7 and Nota > 8
 group by Nome,a.ID_ALU, a.DtNascimento, a.Endereço, a.Sala 
-having COUNT(a.Nome) >= 5
+having COUNT(a.Nome) >= 5;
 
---9 Criação de Triggers
+GO
+
+CREATE VIEW VWDADOSPROF AS 
+SELECT * FROM Professor;
+
+GO
+
+--9 Criação de Trigger
+
+CREATE TRIGGER DelProf
+ON Professor
+FOR DELETE	
+AS BEGIN
+
+DECLARE
+@ID_PROF int;
+	
+SELECT @ID_PROF = ID_PROF FROM deleted;
+DELETE FROM ProfSala WHERE ID_PROF = @ID_PROF;
+
+END
+
+GO
+
+-- 10 Criação de Jobs
+
+
+
+
+
 
