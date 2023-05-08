@@ -1,0 +1,3 @@
+Set WshShell = WScript.CreateObject("WScript.Shell")
+WshShell.RegWrite "HKCU\Control Panel\Desktop\Wallpaper", "c:\windows\web\wallpaper\windows\img0.jpg"
+WshShell.Run "%windir%\System32\RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters", 0, True
