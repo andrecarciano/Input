@@ -1,0 +1,18 @@
+              Declarar variavel implicita:
+              
+    Nomedavariavel#=0       !Variavel, Long Inteiro, recebe 0
+    
+    
+              Sintax do FOR:
+              
+  LOOP contvar#=1 TO !Numero ou variável limite do loop
+    !Comandos a serem executados
+  END
+  
+              Sintax do IF:
+  
+  IF !condição
+    !codigo
+  ELSE
+    !codigo
+  END
