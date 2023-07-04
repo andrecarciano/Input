@@ -2,13 +2,13 @@
               
     Nomedavariavel#=0       !Variavel, Long Inteiro, recebe 0
     
-    
+-------------------------------------------------------------------------------
               Sintax do FOR:
               
   LOOP contvar#=1 TO !Numero ou variável limite do loop
     !Comandos a serem executados
   END
-  
+-------------------------------------------------------------------------------
               Sintax do IF:
   
   IF !condição
@@ -16,12 +16,50 @@
   ELSE
     !codigo
   END
-  
-  
-  
-  Declaração de Variaveis
-  Declaração de Arrays
-  Declaração de Filas
-  IF ELSE e ELIF
-  FOR
-  WHILE
+-------------------------------------------------------------------------------
+
+        Relatório Com Queue e VResult
+
+
+1.	Declarar Tabela em memória Vresult:
+
+! Declarar em Start of "Data Section Before View Declaration"
+
+
+VResult                     FILE, DRIVER('ODBC','/TURBOSQL=TRUE;/BUSYHANDLING=2'), NAME('ResultTransacao'), OWNER(MEM:SQLString), PRE(VRS)
+
+! Variável padrão do VResult
+RECORD                          RECORD
+
+! Declaração de Variáveis que receberão os dados do banco de dados
+! Declarar na mesma sequencia que será feito o Select
+
+NomeLocal                           STRING(35)
+NomeCat                             STRING(35)
+Valor                               LONG
+DescricaoFormaPag                   STRING(30)
+QtdParc                             STRING(7)
+Fixa                                LONG
+Usuario                             STRING(15)
+NumParc                             LONG
+ValorParcela                        LONG
+                                END
+                            END
+
+
+2.	Chamar a Tabela em memória VResult:
+! Chamar em Start of "Before Printing Detail Section"
+
+FREE(Tabela) ! Limpa qualquer dado que tenha na queue “Tabela” antes de usar
+
+! Insere os comandos SQL no VResult
+
+VResult{PROP:SQL} = 'SELECT L.NOME_LOC, C.NOME_CAT, T.VALOR, F.DESCRICAO, T.QTD_PARC,'&|
+         'T.FIXA, T.USUARIO, P.NUM_PARC, P.VALOR_PARC'&|
+         'FROM TRANSACAO T'&|
+         'LEFT JOIN PARCELAS P ON T.ID_TR = P.ID_TR'&| 
+         'JOIN Categoria C ON T.ID_CAT = C.ID_CAT'&| 
+         'JOIN LOCAL L ON T.ID_LOC = L.ID_LOC'&|
+         'JOIN Forma_Pag F ON T.ID_FORMA_PAG = F.ID_FORMA_PAG'&|
+'WHERE (P.MES BETWEEN '&MEM:FiltroDataInicial& ' AND '&MEM:FiltroDataFinal&' )'&|
+'OR (t.QTD_PARC = 1 AND T.DT_COMP BETWEEN '&MEM:FiltroDataInicial&' AND '&MEM:FiltroDataFinal&' )'
