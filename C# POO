@@ -1,0 +1,31 @@
+Estrutura de Classes e Metodos
+
+- Niveis de Acesso de Metodos e classes
+-Acesso-     -Tipo-      -Retorno-        -Nome-              -(Parametros)-      -{Instruções}-
+           -complexos- 
+
+Public        Class          X          Nome da Classe     -----------X----------- {Estrutura}
+Private       interface      X          Nome da Interface  -----------X----------- {Estrutura}
+Internal      struct         X          Nome da Struct     -----------X----------- {Estrutura} 
+protected     
+   
+             -metodos-
+
+   ''         virtual      void         Nome do Método     -----(parametros)----- {Instruções}
+   ''         override     int          Nome do Método     -----(parametros)----- {Instruções}
+   ''         abstract     string       Nome do Método     -----(parametros)----- {Instruções}
+   ''            ''        double       Nome do Método     -----(parametros)----- {Instruções} 
+
+CLASSE ABSTRATA: public abstract class NomeDaClasse{}
+__________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+-Atalhos                   
+ctor
+prop
