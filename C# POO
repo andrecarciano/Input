@@ -8,15 +8,64 @@ Public        Class          X          Nome da Classe     -----------X---------
 Private       interface      X          Nome da Interface  -----------X----------- {Estrutura}
 Internal      struct         X          Nome da Struct     -----------X----------- {Estrutura} 
 protected     
-   
+           -tipos de classe-
+   ''         abstract        
+   ''         static                    
+   ''         sealed
+   ''         partial
+
              -metodos-
 
-   ''         virtual      void         Nome do Método     -----(parametros)----- {Instruções}
-   ''         override     int          Nome do Método     -----(parametros)----- {Instruções}
-   ''         abstract     string       Nome do Método     -----(parametros)----- {Instruções}
+   ''          virtual      void         Nome do Método     -----(parametros)----- {Instruções}
+   ''          override     int          Nome do Método     -----(parametros)----- {Instruções}
+   ''          static       string       Nome do Método     -----(parametros)----- {Instruções}
    ''            ''        double       Nome do Método     -----(parametros)----- {Instruções} 
+   ''            '' 
+   ''            ''
 
 CLASSE ABSTRATA: public abstract class NomeDaClasse{}
+__________________________________________________________________________________________________________________________
+Uso do Base
+ao herdar de uma classe pai, a classe filha deve passar seus parametros para o pai resolver atraves do "base"
+
+//metodo construtor// dessa forma o base passará o parametro para o construtor da classe pai resolver
+public FILHA(string parametro) : base (parametro) {
+
+}
+
+__________________________________________________________________________________________________________________________
+
+Using e Dispose
+Ao implementar a interface IDisposable em uma classe, ela terá que implementar o metodo Dispose(), para destruir os objetos estanciados
+depois do seu uso.
+public class CLASSE : IDisposable
+{
+           public CLASSE(){
+                      //procedimentos do contrutor
+           }
+           public void Dispose(){
+                      //Procedimentos de Destruição do objeto
+           }
+}
+
+Para automatizar o uso do dispose basta estanciar o objeto usando o "using"
+
+using( var objeto = new CLASSE();) //estanciamento do objeto
+{
+           //procedimentos a serem realizados com esse objeto
+} //ao sair o using chama o dispose() do objeto automaticamente
+
+__________________________________________________________________________________________________________________________
+Classe static
+
+Ao criar uma classe estatica, ela não poderá ser estanciada e sempre estará disponivel para ser chamada.
+Seus metodos devem ser todos static.
+Deve ser criada em casos de ser usada em toda a aplicação como uma variavel global e não haverá varios tipos diferentes,
+por exemplo configurações.
+
+__________________________________________________________________________________________________________________________
+sealed
+Garante que uma classe só tenha uma forma, não permite que seja herdada por outra classe
 __________________________________________________________________________________________________________________________
 
 
@@ -26,6 +75,11 @@ ________________________________________________________________________________
 
 
 
+
+
+
+
+__________________________________________________________________________________________________________________________
 -Atalhos                   
 ctor
 prop
