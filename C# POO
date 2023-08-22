@@ -8,6 +8,7 @@ Public        Class          X          Nome da Classe     -----------X---------
 Private       interface      X          Nome da Interface  -----------X----------- {Estrutura}
 Internal      struct         X          Nome da Struct     -----------X----------- {Estrutura} 
 protected     
+
            -tipos de classe-
    ''         abstract        
    ''         static                    
@@ -19,11 +20,22 @@ protected
    ''          virtual      void         Nome do Método     -----(parametros)----- {Instruções}
    ''          override     int          Nome do Método     -----(parametros)----- {Instruções}
    ''          static       string       Nome do Método     -----(parametros)----- {Instruções}
-   ''            ''        double       Nome do Método     -----(parametros)----- {Instruções} 
+   ''          delegate     double       Nome do Método     -----(parametros)----- {Instruções} 
    ''            '' 
-   ''            ''
+   ''            ''   
+
 
 CLASSE ABSTRATA: public abstract class NomeDaClasse{}
+__________________________________________________________________________________________________________________________
+                                            EVENT
+public event EventHandler NomedoEventoEvent;   //declaração do evento
+
+protected virtual void OnNomedoEvento (EventArgs e)
+{
+           EventHandler handler = NomedoEventoEvent;
+           handler?.invoke(this, e);
+}
+
 __________________________________________________________________________________________________________________________
 Uso do Base
 ao herdar de uma classe pai, a classe filha deve passar seus parametros para o pai resolver atraves do "base"
@@ -32,7 +44,7 @@ ao herdar de uma classe pai, a classe filha deve passar seus parametros para o p
 public FILHA(string parametro) : base (parametro) {
 
 }
-
+//classe filha extende classe pai
 __________________________________________________________________________________________________________________________
 
 Using e Dispose
@@ -62,17 +74,46 @@ Ao criar uma classe estatica, ela não poderá ser estanciada e sempre estará d
 Seus metodos devem ser todos static.
 Deve ser criada em casos de ser usada em toda a aplicação como uma variavel global e não haverá varios tipos diferentes,
 por exemplo configurações.
+__________________________________________________________________________________________________________________________
+
+
 
 __________________________________________________________________________________________________________________________
-sealed
+
+Classe sealed
 Garante que uma classe só tenha uma forma, não permite que seja herdada por outra classe
+
+__________________________________________________________________________________________________________________________
+
+Up Cast e DownCast
+
+Quando a classe filha tem todas as caracteristicas da classe pai, um objeto estanciado como filha (var = new filha) pode ser reestanciado 
+como a classe pai (var = new pai)[Up cast] ou o inverso [downcast]
+
+upcast
+var objeto = new classe pai
+objeto = new classe filha
+
+CAST [downcast]
+variavel = (tipo cast explicito) nome da variavel
+variavel = (classe filha) objeto pai
+
+
 __________________________________________________________________________________________________________________________
 
 
+                                                       FUNÇÕES E COMANDOS
 
+__________________________________________________________________________________________________________________________
+:IEquatable<TEntity>
+Ao implementar essa interface temos acesso ao função Equals para comparar algum atributo de dois objetos
+Logica:
+           return ID == TEntity.ID
+__________________________________________________________________________________________________________________________
 
+$"texto {variavel},0"
 
-
+__________________________________________________________________________________________________________________________
 
 
 
@@ -83,3 +124,5 @@ ________________________________________________________________________________
 -Atalhos                   
 ctor
 prop
+ctrl+K+C - comentar codigo
+ctrl+K+U - descomentar codigo
