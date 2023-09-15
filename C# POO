@@ -126,3 +126,34 @@ ctor
 prop
 ctrl+K+C - comentar codigo
 ctrl+K+U - descomentar codigo
+
+___________________________________________________________________________________________________________________________
+
+ASP.NET Core 3.x e posteriores
+A partir do ASP.NET Core 3.x, o IHostingEnvironment foi substituído por IWebHostEnvironment. O uso é semelhante, apenas a injeção de dependência muda para IWebHostEnvironment:
+
+csharp
+Copy code
+using Microsoft.AspNetCore.Hosting;
+
+public class MyController : Controller
+{
+    private readonly IWebHostEnvironment _webHostEnvironment;
+
+    public MyController(IWebHostEnvironment webHostEnvironment)
+    {
+        _webHostEnvironment = webHostEnvironment;
+    }
+
+    public IActionResult MyAction()
+    {
+        // Obtenha o caminho físico de um arquivo ou diretório
+        var path = _webHostEnvironment.ContentRootPath; // Para o diretório raiz do aplicativo
+        var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "subfolder", "file.txt"); // Para um arquivo dentro do diretório raiz
+
+        // Faça o que você precisa com o caminho
+        // ...
+
+        return View();
+    }
+}
