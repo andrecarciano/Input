@@ -127,33 +127,94 @@ prop
 ctrl+K+C - comentar codigo
 ctrl+K+U - descomentar codigo
 
-___________________________________________________________________________________________________________________________
+__________________________________________________________________________________________________________________________
 
-ASP.NET Core 3.x e posteriores
-A partir do ASP.NET Core 3.x, o IHostingEnvironment foi substituído por IWebHostEnvironment. O uso é semelhante, apenas a injeção de dependência muda para IWebHostEnvironment:
 
-csharp
-Copy code
-using Microsoft.AspNetCore.Hosting;
+                                            Comparar Array de Bytes
 
-public class MyController : Controller
-{
-    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public MyController(IWebHostEnvironment webHostEnvironment)
+arq.ARQU_ARQUIVO.SequenceEqual(arquivoBanc.ARQU_ARQUIVO)
+
+__________________________________________________________________________________________________________________________
+
+
+                                            Salvar dados em cookies
+
+Criação de Cookie
+
+    var objeto = new objeto();
+
+    var modelString = JsonSerializer.Serialize(objeto);  //transforma objeto em json
+
+    var cookieOptions = new CookieOptions
     {
-        _webHostEnvironment = webHostEnvironment;
+        HttpOnly = true // bloqueia acesso pelo cliente
+        //inserir validade do cookie
+    };
+
+    Response.Cookies.Append("configuracao", modelString, cookieOptions); //cria o cookie
+
+
+
+Salvar dados no cookies
+
+//verifica se existe o cookie
+    if (HttpContext.Request.Cookies.ContainsKey("configuracao"))
+    {
+        var modelString = JsonSerializer.Serialize(objeto);  //transforma objeto em json
+        HttpContext.Response.Cookies.Append("configuracao", modelString); //adiciona dado ao cookie
     }
-
-    public IActionResult MyAction()
+    else
     {
-        // Obtenha o caminho físico de um arquivo ou diretório
-        var path = _webHostEnvironment.ContentRootPath; // Para o diretório raiz do aplicativo
-        var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "subfolder", "file.txt"); // Para um arquivo dentro do diretório raiz
-
-        // Faça o que você precisa com o caminho
-        // ...
-
-        return View();
+        CriaCookie(objeto);
     }
 }
+
+
+Obter dados do cookie
+public ConfiguracaoViewModel ObtemDadosCookie()
+{
+    if (HttpContext.Request.Cookies.ContainsKey("configuracao"))
+    {
+        var cookie = Request.Cookies["configuracao"];
+        var obj = JsonSerializer.Deserialize<TipoDoObjeto>(cookie);
+        return obj;
+    }
+    else
+    {
+        return new TipoDoObjeto();
+    }
+}
+
+__________________________________________________________________________________________________________________________
+
+
+                                            Converter e abrir um array de bytes em base 64
+
+
+protected void visualizarDocumento(object sender, CommandEventArgs e)
+{
+    if (int.TryParse(e.CommandArgument.ToString(), out int idx))
+    {
+        var arquivo = ArquivosDocumento.ElementAt(idx);
+        byte[] bytesArquivo = arquivo.ARQU_ARQUIVO;
+        var baseb = Convert.ToBase64String(bytesArquivo, 0, bytesArquivo.Length);
+        identDocumento.InnerText = arquivo.ARQU_TIPO == 1 ? "RG/CNH" : "Comprovante de Residência";
+
+        if (arquivo.ARQU_DESCRICAO.ToString().ToUpper().Split('.')[1] == "PDF")
+        {
+            DocPdf.Src = "data:application/pdf;base64," + baseb;
+            DocPdf.Visible = true;
+            DocImage.Visible = false;
+        }
+        else
+        {
+            DocImage.ImageUrl = "data:image/jpeg;base64," + baseb;
+            DocImage.Visible = true;
+            DocPdf.Visible = false;
+        }
+        visDoc.Visible = true;
+    }
+    upListaDocumentos.Update();
+}
+
